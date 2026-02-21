@@ -1,0 +1,6 @@
+@PromptStorageApi_HostAddress = http://localhost:5064
+
+GET {{PromptStorageApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
