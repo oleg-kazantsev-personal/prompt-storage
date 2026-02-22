@@ -23,5 +23,8 @@ public class GeneratorsController : ControllerBase
     {
         return Ok(await _mediator.Send(new GetGeneratorsQuery(), ct));
     }
-        
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
+        => Ok(await _mediator.Send(new GetGeneratorByIdQuery(id), ct));       
 }
