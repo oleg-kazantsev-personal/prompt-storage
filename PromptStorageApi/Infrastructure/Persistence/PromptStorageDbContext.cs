@@ -7,6 +7,12 @@ namespace PromptStorageApi.Infrastructure.Persistence;
 
 public sealed class PromptStorageDbContext : DbContext
 {
+    public DbSet<AIGenerator> AIGenerators => Set<AIGenerator>();
+    public DbSet<Performance> Performances => Set<Performance>();
+    public DbSet<Prompt> Prompts => Set<Prompt>();
+    public DbSet<Scene> Scenes => Set<Scene>();
+    public DbSet<Show> Shows => Set<Show>();
+
     public PromptStorageDbContext(DbContextOptions<PromptStorageDbContext> options) : base(options)
     {
     }

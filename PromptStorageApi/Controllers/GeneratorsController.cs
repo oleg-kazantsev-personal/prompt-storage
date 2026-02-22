@@ -11,9 +11,17 @@ namespace PromptStorageApi.Controllers;
 [Route("api/generators")]
 public class GeneratorsController : ControllerBase
 {
-    [HttpGet]
-    public IActionResult Get()
+    private readonly IMediator _mediator;
+
+    public GeneratorsController(IMediator mediator)
     {
-        return Ok(new { status = "ok" });
+        _mediator = mediator;
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll(CancellationToken ct)
+    {
+        return Ok(await _mediator.Send(new GetGeneratorsQuery(), ct));
+    }
+        
 }
