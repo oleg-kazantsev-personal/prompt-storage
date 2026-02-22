@@ -4,10 +4,12 @@ using PromptStorageApi.Domain.Entities;
 
 namespace PromptStorageApi.Infrastructure.Persistence.Configurations;
 
-public sealed class PerformanceConfiguration : IEntityTypeConfiguration<Performance>    
+public sealed class PerformanceConfiguration : AuditableEntityConfiguration<Performance>    
 {
-    public void Configure(EntityTypeBuilder<Performance> builder)
+    public override void Configure(EntityTypeBuilder<Performance> builder)
     {
+        base.Configure(builder);
+
         builder.ToTable("Performance");
 
         builder.HasKey(p => p.Id);

@@ -4,10 +4,12 @@ using PromptStorageApi.Domain.Entities;
 
 namespace PromptStorageApi.Infrastructure.Persistence.Configurations;
 
-public sealed class PromptConfiguration : IEntityTypeConfiguration<Prompt>
+public sealed class PromptConfiguration : AuditableEntityConfiguration<Prompt>
 {
-    public void Configure(EntityTypeBuilder<Prompt> builder)
+    public override void Configure(EntityTypeBuilder<Prompt> builder)
     {
+        base.Configure(builder);
+
         builder.ToTable("Prompt");
 
         builder.HasKey(p => p.Id);

@@ -4,10 +4,12 @@ using PromptStorageApi.Domain.Entities;
 
 namespace PromptStorageApi.Infrastructure.Persistence.Configurations;
 
-public sealed class AIGeneratorConfiguration : IEntityTypeConfiguration<AIGenerator>
+public sealed class AIGeneratorConfiguration : AuditableEntityConfiguration<AIGenerator>
 {
-    public void Configure(EntityTypeBuilder<AIGenerator> builder)
+    public override void Configure(EntityTypeBuilder<AIGenerator> builder)
     {
+        base.Configure(builder);
+
         builder.ToTable("AIGenerator");
 
         builder.HasKey(g => g.Id);
