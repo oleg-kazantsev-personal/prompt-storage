@@ -1,36 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PromptStorageApi.Infrastructure.Persistence;
+using PromptStorageApi.Application;
+using PromptStorageApi.Infrastructure;
+using PromptStorageApi.Infrastructure.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-builder.Services.AddProblemDetails();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Database context configuration.
-
-builder.Services.AddDbContext<PromptStorageDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("PromptStorageDb")
-         ?? throw new InvalidOperationException("Missing connection string: PromptStorageDb");
-         
-    options.UseSqlServer(
-        connectionString,
-        sql =>
-        {
-            // Good defaults for SQL Server
-            sql.EnableRetryOnFailure();
-            sql.CommandTimeout(30);
-        });
-
-    // Helpful while developing (turn off in prod)
-    options.EnableDetailedErrors();
-    options.EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
-});
+// App layers
+builder.Services
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration, builder.Environment);
 
 // Optional: common API behavior tweaks (handy for validation)
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -39,25 +23,22 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     // options.SuppressModelStateInvalidFilter = false;
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseDeveloperExceptionPage();
-
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 else 
 {
-    app.UseExceptionHandler();
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRouting();
 app.UseAuthorization();
 
