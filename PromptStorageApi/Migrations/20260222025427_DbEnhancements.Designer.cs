@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PromptStorageApi.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using PromptStorageApi.Infrastructure.Persistence;
 namespace PromptStorageApi.Migrations
 {
     [DbContext(typeof(PromptStorageDbContext))]
-    partial class PromptStorageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260222025427_DbEnhancements")]
+    partial class DbEnhancements
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

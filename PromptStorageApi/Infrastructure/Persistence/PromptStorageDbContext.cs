@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using PromptStorageApi.Domain.Entities;
 using PromptStorageApi.Domain.Common;
+using System.Linq.Expressions;
 
 namespace PromptStorageApi.Infrastructure.Persistence;
 
@@ -15,6 +16,25 @@ public sealed class PromptStorageDbContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema("dbo");
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PromptStorageDbContext).Assembly);
+
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(AuditableEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                modelBuilder.Entity(entityType.ClrType)
+                    .HasQueryFilter(
+                        GenerateIsDeletedRestriction(entityType.ClrType));
+            }
+        }
+    }
+
+    public static LambdaExpression GenerateIsDeletedRestriction(Type type)
+    {
+        var param = Expression.Parameter(type, "e");
+        var prop = Expression.Property(param, nameof(AuditableEntity.IsDeleted));
+        var condition = Expression.Equal(prop, Expression.Constant(false));
+
+        return Expression.Lambda(condition, param);
     }
 
     public override int SaveChanges()
@@ -52,6 +72,12 @@ public sealed class PromptStorageDbContext : DbContext
                 // Prevent accidental updates of Created fields
                 entry.Property(x => x.CreatedAtUtc).IsModified = false;
                 entry.Property(x => x.CreatedBy).IsModified = false;
+            }
+            else if (entry.State == EntityState.Deleted)
+            {
+                entry.State = EntityState.Modified;
+                entry.Entity.IsDeleted = true;
+                entry.Entity.DeletedAtUtc = utcNow;
             }
         }
     }

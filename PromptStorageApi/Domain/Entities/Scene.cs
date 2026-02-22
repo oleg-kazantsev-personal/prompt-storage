@@ -12,4 +12,5 @@ public class Scene : AuditableEntity
     public Guid PerformanceId { get; set; }
     public Performance Performance { get; set; } = null!;
     public ICollection<Prompt> Prompts { get; set; } = new List<Prompt>();
+    internal Scene(Guid id) : base(id) { }
 }

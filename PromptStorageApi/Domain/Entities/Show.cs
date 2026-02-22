@@ -9,4 +9,5 @@ public class Show : AuditableEntity
     public required string Name { get; set; }
     public string? Description { get; set; }
     public ICollection<Performance> Performances { get; set; } = new List<Performance>();
+    internal Show(Guid id) : base(id) { }
 }

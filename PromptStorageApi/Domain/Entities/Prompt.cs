@@ -14,4 +14,5 @@ public class Prompt : AuditableEntity
     public AIGenerator AIGenerator { get; set; } = null!;
     public Guid SceneId { get; set; }
     public Scene Scene { get; set; } = null!;
+    internal Prompt(Guid id) : base(id) { }
 }
