@@ -1,8 +1,30 @@
+using Microsoft.EntityFrameworkCore;
+using PromptStorageApi.Infrastructure.Persistence;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddDbContext<PromptStorageDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("PromptStorageDb")
+         ?? throw new InvalidOperationException("Missing connection string: PromptStorageDb");
+         
+    options.UseSqlServer(
+        connectionString,
+        sql =>
+        {
+            // Good defaults for SQL Server
+            sql.EnableRetryOnFailure();
+            sql.CommandTimeout(30);
+        });
+
+    // Helpful while developing (turn off in prod)
+    options.EnableDetailedErrors();
+    options.EnableSensitiveDataLogging(builder.Environment.IsDevelopment());
+});
 
 var app = builder.Build();
 

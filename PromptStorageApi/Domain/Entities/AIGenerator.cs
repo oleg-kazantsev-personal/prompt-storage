@@ -8,4 +8,5 @@ public class AIGenerator : AuditableEntity
 {
     public required string Name { get; set; }
     public string? WebsiteUrl { get; set; }
+    public ICollection<Prompt> Prompts { get; set; } = new List<Prompt>();
 }
