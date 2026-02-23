@@ -24,8 +24,9 @@ public class GeneratorsController : ControllerBase
         => Ok(await _mediator.Send(new GetGeneratorByIdQuery(id), ct));   
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateGeneratorCommand command, CancellationToken ct)
+    public async Task<IActionResult> Create([FromBody] CreateGeneratorRequest request, CancellationToken ct)
     {
+        var command = new CreateGeneratorCommand(request.Name, request.WebsiteUrl);
         var created = await _mediator.Send(command, ct);
         return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
     }
