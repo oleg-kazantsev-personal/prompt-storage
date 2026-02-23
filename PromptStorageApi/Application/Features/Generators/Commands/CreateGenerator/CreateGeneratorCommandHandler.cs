@@ -16,21 +16,23 @@ public class CreateGeneratorCommandHandler : IRequestHandler<CreateGeneratorComm
     }
     public async Task<GeneratorDto> Handle(CreateGeneratorCommand request, CancellationToken cancellationToken)
     {
-        _db.AIGenerators.Add(new AIGenerator(Guid.NewGuid())
+        var entity = new AIGenerator(Guid.NewGuid())
         {
             Name = request.Name,
             WebsiteUrl = request.WebsiteUrl,
             CreatedBy = "system",
             UpdatedBy = "system",
-        });
+        };
+
+        _db.AIGenerators.Add(entity);
 
         await _db.SaveChangesAsync(cancellationToken);
 
         var created = new GeneratorDto
         {
-            Id = Guid.NewGuid(),
-            Name = request.Name,
-            WebsiteUrl = request.WebsiteUrl
+            Id = entity.Id,
+            Name = entity.Name,
+            WebsiteUrl = entity.WebsiteUrl
         };
 
         return created;
