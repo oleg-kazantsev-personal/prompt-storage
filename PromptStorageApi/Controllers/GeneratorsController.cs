@@ -35,6 +35,6 @@ public class GeneratorsController : ControllerBase
     public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
     {
         await _mediator.Send(new DeleteGeneratorCommand(id), ct);
-        return NoContent();
+        return Accepted();
     }        
 }
