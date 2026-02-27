@@ -3,6 +3,7 @@ using MediatR;
 using Application.Features.Shows.Commands.CreateShow;
 using PromptStorageApi.Application.Features.Shows.Queries.GetShowDetails;
 using PromptStorageApi.Application.Features.Shows.Commands.DeleteShow;
+using PromptStorageApi.Application.Features.Shows.Commands.AddPerformance;
 
 namespace PromptStorageApi.Controllers;
 
@@ -38,4 +39,11 @@ public class ShowsController : ControllerBase
         await _mediator.Send(new DeleteShowCommand(id), ct);
         return NoContent();
     }    
+
+    [HttpPost("{showId:guid}/performances")]
+    public async Task<IActionResult> AddPerformance(Guid showId, [FromBody] AddPerformanceCommand body, CancellationToken ct)
+    {
+        var created = await _mediator.Send(body with { ShowId = showId }, ct);
+        return Ok(created);
+    }
 }
