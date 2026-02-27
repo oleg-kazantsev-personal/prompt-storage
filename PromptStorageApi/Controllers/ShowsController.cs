@@ -17,10 +17,8 @@ public class ShowsController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult Get()
-    {
-        return Ok(new { status = "ok" });
-    }
+    public async Task<IActionResult> GetAll(CancellationToken ct)
+        => Ok(await _mediator.Send(new GetShowsQuery(), ct));
 
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
