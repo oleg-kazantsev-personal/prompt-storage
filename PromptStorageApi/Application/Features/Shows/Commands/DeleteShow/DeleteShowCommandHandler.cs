@@ -24,6 +24,21 @@ public class DeleteShowCommandHandler : IRequestHandler<DeleteShowCommand, Unit>
             throw new KeyNotFoundException($"Show with ID {request.Id} not found.");
         }
 
+        // Remove all dependent entities
+        var performances = await _db.Performances
+            .Where(p => p.ShowId == request.Id)
+            .ToListAsync(cancellationToken);
+        
+        foreach (var performance in performances)
+        {
+            var scenes = await _db.Scenes
+            .Where(s => s.PerformanceId == performance.Id)
+            .ToListAsync(cancellationToken);
+            
+            _db.Scenes.RemoveRange(scenes);
+        }
+        
+        _db.Performances.RemoveRange(performances);
         _db.Shows.Remove(show);
         await _db.SaveChangesAsync(cancellationToken);
     
