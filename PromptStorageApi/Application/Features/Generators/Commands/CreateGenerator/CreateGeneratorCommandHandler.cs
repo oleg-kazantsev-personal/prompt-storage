@@ -14,6 +14,7 @@ public class CreateGeneratorCommandHandler : IRequestHandler<CreateGeneratorComm
     {
         _db = db;
     }
+    
     public async Task<GeneratorDto> Handle(CreateGeneratorCommand request, CancellationToken cancellationToken)
     {
         var entity = new AIGenerator(Guid.NewGuid())

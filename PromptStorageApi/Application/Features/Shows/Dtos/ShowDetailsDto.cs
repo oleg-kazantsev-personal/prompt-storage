@@ -1,4 +1,4 @@
-namespace Application.Features.Shows.Dtos;
+namespace PromptStorageApi.Application.Features.Shows.Dtos;
 
 public class ShowDetailsDto
 {
