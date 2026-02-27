@@ -1,7 +1,8 @@
 using MediatR;
 
-namespace Application.Features.Shows.Commands.CreateShow;
+namespace PromptStorageApi.Application.Features.Shows.Commands.CreateShow;
 
 public sealed record CreateShowCommand(
-    string Name
+    string Name,
+    string? Description
 ) : IRequest<Guid>;   

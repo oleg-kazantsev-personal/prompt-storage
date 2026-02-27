@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Application.Features.Shows.Commands.CreateShow;
+using PromptStorageApi.Application.Features.Shows.Commands.CreateShow;
 using PromptStorageApi.Application.Features.Shows.Queries.GetShowDetails;
 using PromptStorageApi.Application.Features.Shows.Commands.DeleteShow;
 using PromptStorageApi.Application.Features.Shows.Commands.AddPerformance;

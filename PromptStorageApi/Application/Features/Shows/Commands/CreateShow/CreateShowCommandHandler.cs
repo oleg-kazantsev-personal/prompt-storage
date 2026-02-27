@@ -4,7 +4,7 @@ using PromptStorageApi.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using PromptStorageApi.Domain.Entities;
 
-namespace Application.Features.Shows.Commands.CreateShow;
+namespace PromptStorageApi.Application.Features.Shows.Commands.CreateShow;
 
 public sealed class CreateShowCommandHandler : IRequestHandler<CreateShowCommand, Guid>
 {
@@ -20,6 +20,7 @@ public sealed class CreateShowCommandHandler : IRequestHandler<CreateShowCommand
         var entity = new Show(Guid.NewGuid())
         {
             Name = request.Name,
+            Description = request.Description,
             CreatedBy = "system",
             UpdatedBy = "system",
         };
