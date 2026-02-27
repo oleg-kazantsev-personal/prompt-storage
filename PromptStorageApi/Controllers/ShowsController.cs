@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Application.Features.Shows.Commands.CreateShow;
 using PromptStorageApi.Application.Features.Shows.Queries.GetShowDetails;
+using PromptStorageApi.Application.Features.Shows.Commands.DeleteShow;
 
 namespace PromptStorageApi.Controllers;
 
@@ -30,4 +31,11 @@ public class ShowsController : ControllerBase
         var showId = await _mediator.Send(command, ct);
         return CreatedAtAction(nameof(GetById), new { id = showId }, showId);
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    {
+        await _mediator.Send(new DeleteShowCommand(id), ct);
+        return NoContent();
+    }    
 }
