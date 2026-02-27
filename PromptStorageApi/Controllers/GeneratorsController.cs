@@ -13,18 +13,28 @@ public class GeneratorsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public GeneratorsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public GeneratorsController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken ct)
-    {
-        return Ok(await _mediator.Send(new GetGeneratorsQuery(), ct));
-    }
-
+        => Ok(await _mediator.Send(new GetGeneratorsQuery(), ct));
+    
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
-        => Ok(await _mediator.Send(new GetGeneratorByIdQuery(id), ct));       
+        => Ok(await _mediator.Send(new GetGeneratorByIdQuery(id), ct));   
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] CreateGeneratorRequest request, CancellationToken ct)
+    {
+        var command = new CreateGeneratorCommand(request.Name, request.WebsiteUrl);
+        var created = await _mediator.Send(command, ct);
+        return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    {
+        await _mediator.Send(new DeleteGeneratorCommand(id), ct);
+        return NoContent();
+    }        
 }
