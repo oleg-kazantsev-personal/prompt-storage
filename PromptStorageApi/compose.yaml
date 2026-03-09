@@ -1,0 +1,43 @@
+services:
+
+  sqlserver-dev:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-dev
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "PromptStorage_Strong_Dev_123!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+    restart: unless-stopped
+
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: promptstorage-api
+    depends_on:
+      - sqlserver-dev
+      - rabbitmq
+    ports:
+      - "5064:5064"
+      - "7244:7244"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ConnectionStrings__PromptStorageDb: "Server=sqlserver-dev,1433;Database=PromptStorageDb;User Id=prompt_app;Password=PromptStorage_Strong_Dev_123!;TrustServerCertificate=True;"
+    restart: unless-stopped
+
+
+volumes:
+  sql_data:
