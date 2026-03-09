@@ -52,4 +52,11 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# macOS 
 .DS_Store
+
+# Certificates
+PromptStorageApi/mini256.local+3-key.pem
+PromptStorageApi/mini256.local+3.p12
+PromptStorageApi/mini256.local+3.pem
