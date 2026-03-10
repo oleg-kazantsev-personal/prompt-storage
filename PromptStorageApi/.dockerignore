@@ -1,0 +1,30 @@
+# Version control and metadata
+.git
+.gitignore
+
+# IDE/editor settings
+.idea/
+.vscode/
+.vs/
+
+# Build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+
+# Test and coverage artifacts
+TestResults/
+coverage/
+*.trx
+
+# OS/editor temp files
+.DS_Store
+*.swp
+*.tmp
+*.user
+*.suo
+
+# Local environment/config files not needed for image build
+.env
+compose.yaml
