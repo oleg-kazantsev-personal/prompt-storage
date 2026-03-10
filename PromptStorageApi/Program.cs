@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PromptStorageApi.Application;
 using PromptStorageApi.Infrastructure;
 using PromptStorageApi.Infrastructure.Exceptions;
+using PromptStorageApi.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +48,28 @@ if (app.Environment.IsDevelopment())
 else 
 {
     app.UseHsts();
+}
+
+// Apply any pending EF Core migrations at startup. In production, you might want to handle this differently (e.g. manual migrations or a separate migration tool).
+using (var scope = app.Services.CreateScope())
+{
+    var service = scope.ServiceProvider;
+    var logger = service.GetRequiredService<ILogger<Program>>();
+
+try
+    {
+        logger.LogInformation("Applying database migrations...");
+
+        var db = service.GetRequiredService<PromptStorageDbContext>();
+        await db.Database.MigrateAsync();
+
+        logger.LogInformation("Database migrations applied successfully.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while applying database migrations.");
+        throw;
+    }
 }
 
 app.UseHttpsRedirection();
