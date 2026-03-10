@@ -1,0 +1,14 @@
+namespace Application.Features.Prompts.Dtos;
+
+public record PromptListItemDto
+(
+    Guid Id,
+    string Title,
+    Guid GeneratorId,
+    string GeneratorName,
+    Guid SceneId,
+    string SceneTitle,
+    string? Tags,
+    DateTime CreatedUtc,
+    DateTime? UpdatedUtc
+);
